@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, createContext, useContext } from 'react';
 import { ArrowUp, ArrowRight, ArrowLeft, ArrowDown, Trash2, RotateCcw, Star, Bot, Check, X, Sun, Moon, Trophy } from 'lucide-react';
 
+
 // === CONFIGURAÇÕES E CONSTANTES DO JOGO ===
 const CONFIG_JOGO = {
   LIMITE_MAX_COMANDOS: 12,
@@ -155,7 +156,47 @@ function tocarSomErro() {
   } catch { /* Audio desabilitado */ }
 }
 
-// === GERADOR DE FASES ===
+// === ALGORITMO DE VALIDAÇÃO DE CAMINHO (BFS) ===
+function existeCaminhoValido(tamanho: number, inicio: Posicao, fim: Posicao, obstaculos: Obstaculo[]): boolean {
+  const setObstaculos = new Set(obstaculos.map(o => `${o.x},${o.y}`));
+  const fila: Posicao[] = [{ ...inicio }];
+  const visitados = new Set<string>([`${inicio.x},${inicio.y}`]);
+  
+  const direcoes = [
+    { x: 0, y: -1 }, // Cima
+    { x: 0, y: 1 },  // Baixo
+    { x: -1, y: 0 }, // Esquerda
+    { x: 1, y: 0 }   // Direita
+  ];
+
+  while (fila.length > 0) {
+    const atual = fila.shift()!;
+
+    if (atual.x === fim.x && atual.y === fim.y) {
+      return true;
+    }
+
+    for (const dir of direcoes) {
+      const novoX = atual.x + dir.x;
+      const novoY = atual.y + dir.y;
+      const chave = `${novoX},${novoY}`;
+
+      if (
+        novoX >= 0 && novoX < tamanho &&
+        novoY >= 0 && novoY < tamanho &&
+        !setObstaculos.has(chave) &&
+        !visitados.has(chave)
+      ) {
+        visitados.add(chave);
+        fila.push({ x: novoX, y: novoY });
+      }
+    }
+  }
+
+  return false;
+}
+
+// === GERADOR DE FASES CORRIGIDO ===
 function geradorDeFases(nivel: number): FaseGerada {
   const tamanhoGrade = Math.min(3 + Math.floor(nivel / 4), CONFIG_JOGO.TAMANHO_MAX_TABULEIRO);
   const possuiObstaculos = nivel >= 8;
@@ -163,7 +204,7 @@ function geradorDeFases(nivel: number): FaseGerada {
 
   let posicaoInicial: Posicao = { x: 0, y: tamanhoGrade - 1 };
   let posicaoEstrela: Posicao = { x: tamanhoGrade - 1, y: 0 };
-  const obstaculos: Obstaculo[] = [];
+  let obstaculos: Obstaculo[] = [];
 
   if (nivel <= 3) {
     posicaoInicial = { x: Math.floor(tamanhoGrade / 2), y: tamanhoGrade - 1 };
@@ -177,22 +218,34 @@ function geradorDeFases(nivel: number): FaseGerada {
       posicaoEstrela = { x: 0, y: 0 };
     }
   } else {
-    const posicoesOcupadas = new Set<string>([
-      `${posicaoInicial.x},${posicaoInicial.y}`,
-      `${posicaoEstrela.x},${posicaoEstrela.y}`
-    ]);
-    for (let i = 0; i < qtdObstaculos; i++) {
-      let tentativas = 0;
-      while (tentativas < 50) {
-        const x = Math.floor(Math.random() * tamanhoGrade);
-        const y = Math.floor(Math.random() * tamanhoGrade);
-        if (!posicoesOcupadas.has(`${x},${y}`)) {
-          posicoesOcupadas.add(`${x},${y}`);
-          obstaculos.push({ x, y });
-          break;
+    let mapaValido = false;
+    let tentativasGlobais = 0;
+
+    // Fica rodando o sorteio em loop até achar um mapa totalmente passível
+    while (!mapaValido && tentativasGlobais < 100) {
+      obstaculos = [];
+      const posicoesOcupadas = new Set<string>([
+        `${posicaoInicial.x},${posicaoInicial.y}`,
+        `${posicaoEstrela.x},${posicaoEstrela.y}`
+      ]);
+
+      for (let i = 0; i < qtdObstaculos; i++) {
+        let tentativasSorteio = 0;
+        while (tentativasSorteio < 50) {
+          const x = Math.floor(Math.random() * tamanhoGrade);
+          const y = Math.floor(Math.random() * tamanhoGrade);
+          if (!posicoesOcupadas.has(`${x},${y}`)) {
+            posicoesOcupadas.add(`${x},${y}`);
+            obstaculos.push({ x, y });
+            break;
+          }
+          tentativasSorteio++;
         }
-        tentativas++;
       }
+
+      // Valida usando o algoritmo BFS se há saída legítima
+      mapaValido = existeCaminhoValido(tamanhoGrade, posicaoInicial, posicaoEstrela, obstaculos);
+      tentativasGlobais++;
     }
   }
 
@@ -369,11 +422,13 @@ export default function AppCodigoDuolingo() {
               {comandosSelecionados.length === 0 ? (
                 <span className={`${cor.textoSuave} text-sm`}>Toque nas setas para programar!</span>
               ) : (
-                comandosSelecionados.map((cmd, index) => (
-                  <div key={index} className={`w-9 h-9 ${cor.comandoBotao} rounded-xl flex items-center justify-center text-white border-b-4 ${cor.comandoBotaoSombra}`}>
-                    {obterIconeDirecao(cmd)}
-                  </div>
-                ))
+                <div className="flex flex-wrap gap-2">
+                  {comandosSelecionados.map((cmd, index) => (
+                    <div key={index} className={`w-9 h-9 ${cor.comandoBotao} rounded-xl flex items-center justify-center text-white border-b-4 ${cor.comandoBotaoSombra}`}>
+                      {obterIconeDirecao(cmd)}
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
           </div>
