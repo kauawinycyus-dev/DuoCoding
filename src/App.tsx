@@ -509,7 +509,7 @@ function TelaBoasVindas({ aoIniciar }: { aoIniciar: () => void }) {
     <div className={`min-h-screen ${cor.fundo} flex flex-col items-center justify-between p-6 w-full`}>
       <div className="flex-1 flex flex-col items-center justify-center">
         <img src="/BOT.png" alt="Bot" />
-        <h1 className={`text-4xl font-black ${cor.texto}`}>CODE QUEST</h1>
+        <h1 className={`text-4xl font-black ${cor.texto}`}>Programar Brincando</h1>
         <p className={`${cor.textoSecundario} text-sm text-center`}>Aprenda lógica de programação brincando!</p>
       </div>
       <button onClick={aoIniciar} className={`w-full h-16 ${cor.primaria} rounded-2xl text-white font-black text-lg border-b-4 ${cor.primariaSombra}`}>
