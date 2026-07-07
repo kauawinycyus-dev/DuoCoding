@@ -1,3 +1,8 @@
+body {
+  background-color: lightblue !important;
+}
+
+/* Tente adicionar as diretivas antigas do Tailwind também, só por garantia */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
