@@ -1,75 +1,38 @@
-# React + TypeScript + Vite
+# 🤖 DuoCoding — O "Duolingo" da Programação
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> *"O brincar é a forma mais elevada de pesquisa."* — **Albert Einstein**
 
-Currently, two official plugins are available:
+O **Code Quest** é uma plataforma educacional gamificada desenvolvida em React, TypeScript e Tailwind CSS, inspirada na interface e na fluidez do Duolingo. O objetivo principal do projeto é ensinar conceitos fundamentais de lógica de programação e algoritmos sequenciais de maneira visual, prática e altamente divertida.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Neste jogo, o usuário assume o papel de um programador que precisa guiar um robô espacial através de um tabuleiro quadriculado até uma estrela guia. Para se movimentar, o jogador não digita códigos complexos, mas sim empilha blocos lógicos de comandos de direção (Cima, Baixo, Esquerda, Direita), montando seu primeiro algoritmo de navegação!
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🚀 Funcionalidades Principais
 
-## Expanding the ESLint configuration
+- **Gamificação Estilo Duolingo:** Layout mobile-first limpo, botões com feedback tátil/visual 3D e sistema de progressão por níveis.
+- **Geração Procedural Segura (BFS):** O jogo cria fases dinamicamente com obstáculos a partir do nível 8. Para garantir que nenhuma fase seja impossível de passar, um algoritmo de busca em largura (*Breadth-First Search*) valida o tabuleiro em segundo plano antes de renderizá-lo.
+- **Console de Programação Dinâmico:** Uma área visual onde os comandos selecionados são enfileirados, permitindo que o usuário revise a sequência lógica antes de "compilar" e rodar o robô.
+- **Áudio Sintetizado (Web Audio API):** Efeitos sonoros retro gerados diretamente via código de oscilação, garantindo leveza e sem dependência de carregamento de arquivos externos `.mp3`.
+- **Modo Escuro / Modo Claro:** Interface adaptável que respeita a preferência visual do usuário com transições suaves de cores.
+- **Sistema de Troféus:** Recompensa o progresso do usuário a cada fase concluída com sucesso.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🛠️ Tecnologias Utilizadas
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **React 18** (com Hooks avançados como `useCallback`, `useContext` e `useEffect`)
+- **TypeScript** (Garantia de tipagem estática e segurança do código)
+- **Tailwind CSS v4** (Estilização utilitária rápida e responsiva)
+- **Vite** (Ferramenta de build ultra-rápida)
+- **Lucide React** (Pacote de ícones minimalistas e modernos)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
 
-```
+## 🏗️ Como Rodar o Projeto Localmente
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Certifique-se de ter o [Node.js](https://nodejs.org/) instalado em sua máquina.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+1. **Clone o repositório:**
+   ```bash
+   git clone [https://github.com/SEU_USUARIO/NOME_DO_REPOSITORIO.git](https://github.com/SEU_USUARIO/NOME_DO_REPOSITORIO.git)
