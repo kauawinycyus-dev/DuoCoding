@@ -453,7 +453,7 @@ function TelaBoasVindas({ aoIniciar }: { aoIniciar: () => void }) {
   return (
     <div className={`min-h-screen ${cor.fundo} flex flex-col items-center justify-between p-6 w-full`}>
       <div className="flex-1 flex flex-col items-center justify-center">
-        <div className="text-6xl mb-2"><img src="/src/assets/BOT.png" alt="Robo"/></div>
+        <img src="/BOT.png" alt="Bot" />
         <h1 className={`text-4xl font-black ${cor.texto}`}>CODE QUEST</h1>
         <p className={`${cor.textoSecundario} text-sm text-center`}>Aprenda lógica de programação brincando!</p>
       </div>
